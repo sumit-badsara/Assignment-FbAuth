@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    All Pages
+{% endblock title %}
+  
+
+{% block content %}
+  <h2 class="text-center">Homepage</h2>
+  <a href="/"><= Go Back</a>
+  <button style="float:right" onclick="logout()">logout</button>
+  
+  <div class="container">
+           {% for page in pages %}
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h3 class="card-title">{{page.name}}</h3>
+                    <p class="card-text">{{page.category}}</p>
+                    <hr>
+                    <form method="POST" id="editpage-form" action="/edit/{{page.id}}">
+                        <input type="text" name="token" value={{page.access_token}} hidden>
+                        <button class="btn btn-primary" onclick="EditPage()">Edit Page</a>    
+                    </form>
+                </div>
+            </div>
+        
+            {% endfor %}
+  </div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1328941030601769',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v3.2'
+    });
+      
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+}
+
+function EditPage(){
+    FB.getLoginStatus(function(response) {
+        if(response.status=='connected')
+        {
+            $("#editpage-form").submit();
+        }
+        else
+        {
+            window.location = '/'
+        }
+      });
+}
+
+function statusChangeCallback(response){
+  if(response.status == 'connected')
+  {
+    console.log(response.authResponse.accessToken)
+  }
+  else{
+    console.log("Unauthorized");
+    window.location="/";
+  }
+}
+
+//Logout function
+function logout(){
+  FB.getLoginStatus(function(response) {
+    FB.logout(function(response){
+      console.log("Logged Out!");
+      window.location = "/";
+    });
+  });
+}
+
+//To include facebook sdk
+(function(d, s, id){
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "https://connect.facebook.net/en_US/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+{% endblock %}

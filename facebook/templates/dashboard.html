@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Dashboard {% endblock title %}
+
+
+{% block style %}
+    <style>
+        .wrapper{
+            display:flex;
+            width: 100%;
+            align-items: stretch;
+        }
+        #sidebar{
+            min-width: 250px;
+            max-width: 250px;
+            min-height: 100vh;
+            background: rgb(120, 209, 197);
+            color: #fff;
+            font-size:1em;
+        }
+        #sidebar ul li.active > a, a[aria-expanded="true"] {
+            color: #fff;
+            background: rgb(65, 125, 133);
+        }
+        a, a:hover, a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        #sidebar ul.components {
+            padding: 20px 0;
+            border-bottom: 1px solid #47748b;
+        }
+        #sidebar ul p {
+            color: #fff;
+            padding: 10px;
+        }
+
+        #sidebar ul li a {
+            padding: 10px;
+            font-size: 1.1em;
+            display: block;
+        }
+        i{
+            padding:10px;
+        }
+        #sidebar ul li:hover i:hover {
+            color: rgb(120, 209, 197);
+            background: #fff;
+        }
+        #sidebar .sidebar-header {
+            padding: 20px;
+            background: #6d7fcc;
+        }
+        ul ul a {
+            font-size: 0.9em !important;
+            padding-left: 30px !important;
+            background: rgb(125, 201, 131);
+        }
+    </style>
+{% endblock style %}
+    
+
+
+{% block content %}
+<div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header text-center" style="font-size:2em; background-color:rgb(104, 189, 177)">
+                <h3 class="text-center">Assignment</h3>
+            </div>
+    
+            <ul class="list-unstyled components" class="text-center" style="margin-left:10px;">
+                <li>
+                    <i class="fa fa-home fa-lg" > Dashboard</i>
+                </li><br>
+                <li>
+                    <i class="fa fa-laptop fa-lg" aria-hidden="true"> Website</i> 
+                </li><br>
+                <li>
+                    <i class="fa fa-address-book fa-lg" aria-hidden="true"> Visitors</i>
+                </li><br>
+                <li>
+                    <i class="fa fa-bar-chart fa-lg" aria-hidden="true"> Reviews</i>
+                </li><br>
+                <li class="active">
+                    <i class="fa fa-binoculars fa-lg" aria-hidden="true"> Listings</i>
+                </li><br>
+                <li>
+                    <i class="fa fa-coffee fa-lg" aria-hidden="true"> Appointments</i>
+                </li><br>
+                <li>
+                    <i class="fa fa-eye fa-lg" aria-hidden="true"> Settings</i> 
+                </li>
+            </ul>
+        </nav>
+        
+        <div>
+            <div class="row">
+                <table class="table table-hover thread-light" style="margin:10px;border:solid grey; margin-top:30%; max-width:80%; position: absolute; top: -300px; bottom: 0; left: 250px; right: 0;">
+                    <caption class="text-center" style="background-color:rgb(203, 233, 226); color:black;font-size:2em;">Listings</caption>
+                    <tr>
+                        <th>Source</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Rating</th>
+                        <th>Listed</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td>Google</td>
+                        <td>ABC Dental</td>
+                        <td>2101 California St</td>
+                        <td>111.111.1111</td>
+                        <td>3/5</td>
+                        <td>Yes</td>
+                        <td><i class="fa fa-check fa-lg" aria-hidden="true"></i></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Yelp</td>
+                        <td>ABC Dental</td>
+                        <td>2101 California St</td>
+                        <td>111.111.1111</td>
+                        <td>2/5</td>
+                        <td>No</td>
+                        <td><i class="fa fa-times fa-lg" aria-hidden="true"></i></td>
+                        <td><button class="btn btn-md btn-primary">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td>Yahoo!</td>
+                        <td>ABC Dental</td>
+                        <td>2101 California St</td>
+                        <td>111.111.1111</td>
+                        <td>3/5</td>
+                        <td>No</td>
+                        <td><i class="fa fa-times fa-lg" aria-hidden="true"></i></td>
+                        <td><button class="btn btn-md btn-primary">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td>Foursquare</td>
+                        <td>ABC Dental</td>
+                        <td>2101 California St</td>
+                        <td>111.111.1111</td>
+                        <td>2/5</td>
+                        <td>No</td>
+                        <td><i class="fa fa-check fa-lg" aria-hidden="true"></i></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Facebook</td>
+                        <td>ABC Dental</td>
+                        <td>2101 California St</td>
+                        <td>111.111.1111</td>
+                        <td>3/5</td>
+                        <td>Yes</td>
+                        <td><i class="fa fa-check fa-lg" aria-hidden="true"></i></td>
+                        <td>
+                            <fb:login-button scope="public_profile,email,manage_pages" onlogin="checkLoginState();">Login</fb:login-button>
+                            <form method="POST" action="/pages" id="tokenform">
+                                <input type="text" id="access_token" name="access_token" hidden>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    
+
+
+{% block javascript %}    
+<script>   
+  
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1328941030601769',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v3.2'
+        });
+            
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    };
+    
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+        });
+    }
+    
+    
+    function statusChangeCallback(response){
+        if(response.status == 'connected')
+        {
+        console.log("User is authorized");
+        $("#access_token").val(response.authResponse.accessToken);
+        $("#tokenform").submit();
+        }
+        else{
+        console.log("Unauthorized");
+        }
+    }
+    
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    
+    </script>
+{% endblock javascript %}
+    
