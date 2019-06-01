@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from facebook.urls import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('oauth/', include('social_django.urls'), name='social'),
-    path('', include('facebook.urls'), name='facebook'),
+    path('', views.login, name='login'),
+    path('pages', views.pages, name='pages'),
+    path('edit/<int:id>', views.edit, name='edit'), 
+    path('update/<int:id>', views.update, name='update')
+
+    #path('', include('facebook.urls'), name='facebook'),
 ]
