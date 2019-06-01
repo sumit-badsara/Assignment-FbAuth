@@ -184,9 +184,9 @@
             version    : 'v3.3'
         });
             
-        //FB.getLoginStatus(function(response) {
-        //    statusChangeCallback(response);
-        //});
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
     };
     
     function checkLoginState() {
@@ -194,6 +194,16 @@
         statusChangeCallback(response);
         });
     }
+
+    //Logout function
+function logout(){
+    FB.getLoginStatus(function(response) {
+      FB.logout(function(response){
+        console.log("Logged Out!");
+        window.location = "/";
+      });
+    });
+  }
     
     function statusChangeCallback(response){
         if(response.status == 'connected')

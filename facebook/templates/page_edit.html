@@ -13,23 +13,25 @@
         <div class="col-md-12 center">
                 <h2 style="margin-left:200px; margin-right:200px; margin-top:50px"> Update Page Details</h2>
                 <form method="POST" id="pageform" action="/update/{{page.id}}" style="margin:200px; margin-top:100px">
-                    Name :      <input class="form-control" type="text" name="name" value="{{page.name}}">             <br><br>
-                    Description:<textarea class="form-control" name="description">{{page.description}}</textarea>      <br><br>
-                    Impressum:  <input class="form-control" type="text" name="impressum" value="{{page.impressum}}">   <br><br>
-                    About:      <textarea class="form-control" name="about">{{page.about}}</textarea>                  <br><br>
-                    Phone:      <input class = "form-control" data-validation="number" type="text" name="phone" value="{{page.phone}}">                      <br><br>
-                    Website:    <input class = "form-control" data-validation="url" type="text" name="website" value="{{page.website}}">                  <br><br>
-                    Overview:   <input class = "form-control" type="text" name="overview" value="{{page.company_overview}}"><br><br>
+                    Name :      <input class="form-control" type="text" id="name" name="name" value="{{page.name}}">             <br><br>
+                    Description:<textarea class="form-control" id="description" name="description">{{page.description}}</textarea>      <br><br>
+                    Impressum:  <input class="form-control" type="text" id="impressum" name="impressum" value="{{page.impressum}}">   <br><br>
+                    About:      <textarea class="form-control" id="about" name="about">{{page.about}}</textarea>                  <br><br>
+                    Phone:      <input class = "form-control" data-validation="number" type="text" id="phone" name="phone" value="{{page.phone}}">                      <br><br>
+                    Website:    <input class = "form-control" data-validation="url" type="text" id="website" name="website" value="{{page.website}}">                  <br><br>
+                    Overview:   <input class = "form-control" type="text" id="overview" name="overview" value="{{page.company_overview}}"><br><br>
                     Emails:
                     {% if not page.emails|length %}
-                        <input class = "form-control" type="text" name="email" data-validation="email"><br>
+                        <input class = "form-control" type="text" id="email" name="email" data-validation="email"><br>
                     {% else %}
                         {% for email in page.emails %}
-                        <input class = "form-control" type="text" name="email" data-validation="email" value="{{email}}"><br>
+                        <input class = "form-control" type="text" id="email" name="email" data-validation="email" value="{{email}}"><br>
                         {% endfor %}
                     {% endif %}
                     <input type="text" name="token" value="{{page.access_token}}" hidden>
-                    <button class="form-control btn btn-success" type="submit">Save</button><br><hr>
+                    <input type="text" name="page_id" value="{{page.id}}" hidden>
+                    <!-- <input type="text" name="token" value="{{page.user_access_token}}" hidden> -->
+                    <button class="form-control btn btn-success" type="button" onclick="Validate()">Save</button><br><hr>
                     <button class="form-control btn btn-danger" type="button" onclick="cancel()">Cancel</button>
                 </form>
         </div>
@@ -53,7 +55,80 @@
 
         function cancel()
         {
-          window.location = '/'
+          window.location = '/';
+        }
+
+        function checkNull(parameter, Name) {
+            if (parameter == "") {
+                M.toast({ html: Name + " cannot be empty" });
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function isUrlValid(userInput) {
+            var res = userInput.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+            if (res == null) {
+                M.toast({ html: "Enter a valid website url" });
+                return false;
+            }
+            else
+                return true;
+        }
+
+        function validateEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            var res = email.match(re);
+            if (res == null) {
+                M.toast({ html: "Enter a valid email address" });
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function phoneNumberValidate(number) {
+            if (number.length == 10) {
+                return true;
+            } else {
+                $("#phone").toast("Enter a valid 10 digit phone number");
+                return false;
+            }
+        }
+
+        function Validate()
+        {
+            console.log("Validate")
+            var description = $("#description").val();
+            var impressum = $("#impressum").val();
+            var about = $("#about").val();
+            var phone = $("#phone").val();
+            var website = $("#website").val();
+            var company_overview = $("#overview").val();
+            var email = $("#email").val();
+            
+            var descriptionCheck = checkNull(description, "Description");
+            var impressumCheck = checkNull(impressum, "Impressum");
+            var aboutCheck = checkNull(about, "About");
+            var phoneCheck = checkNull(phone, "Phone");
+            var websiteCheck = checkNull(website, "Website");
+            var emailCheck = checkNull(email, "E-mail");
+            var company_overviewCheck = checkNull(company_overview, "Company Overview")
+            var phoneValidate = phoneNumberValidate(phone);
+            var websiteUrlValidate = isUrlValid(website);
+            if( typeof email != "undefined") {
+                var emailValidate = validateEmail(email);
+            } else {
+                var emailValidate = true;
+            }
+            if (descriptionCheck && emailValidate && impressumCheck && emailCheck && aboutCheck && phoneCheck && websiteCheck && company_overviewCheck && phoneValidate && websiteUrlValidate) {
+                $("#pageform").submit()
+            }
+            else
+            {
+
+            }
         }
 
         (function(d, s, id){
@@ -66,5 +141,6 @@
            
 
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 {% endblock javascript %}
     

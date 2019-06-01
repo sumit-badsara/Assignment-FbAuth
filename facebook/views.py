@@ -8,12 +8,10 @@ def login(request):
 
 @login_required
 @csrf_exempt
-def pages(request, access_token=None):
-    if request.method == "POST" or access_token:
-        try:
-            data = request.POST.get('access_token')
-        except:
-            data = access_token
+def pages(request):
+    if request.method == "POST":
+
+        data = request.POST.get('access_token')
         
         pages = requests.get(("https://graph.facebook.com/me/accounts") , params = {"access_token" : data }).json()['data']
         page_list = []
@@ -21,7 +19,7 @@ def pages(request, access_token=None):
             p = {
                 'id'            : page['id'],
                 'name'          : page['name'],
-                'category'   : page['category'],
+                'category'      : page['category'],
                 'access_token'  : page['access_token'],
             }
             page_list.append(p)
@@ -31,12 +29,15 @@ def pages(request, access_token=None):
 
 @login_required
 @csrf_exempt
-def edit(request, id):
-    fields=["category","name","phone","impressum","general_info","about","attire","bio","location","parking","hours","emails","website","description","company_overview","personal_info","access_token"]
+def edit(request, id, token=None):
+    fields=["id","category","name","phone","impressum","general_info","about","attire","bio","location","parking","hours","emails","website","description","company_overview","personal_info","access_token"]
     fieldstring=','.join(fields)
 
-    if request.method == "POST":
-        token = request.POST.get("token")
+    if request.method == "POST" or token:
+        if token:
+            token = token
+        else:
+            token = request.POST.get("token")
         page_detail = requests.get(("https://graph.facebook.com/"+str(id)+"?") , params = {"fields": fieldstring, "access_token" : token }).json()
         return render(request, 'page_edit.html', context = {'page':page_detail})
     return render(request, 'pages.html')
@@ -57,9 +58,11 @@ def update(request, id):
     Data['website'] = request.POST.get("website")
     Data['impressum'] = request.POST.get('impressum')
     Data['company_overview'] = request.POST.get("overview")
+    Data['page_id'] = request.POST.get("page_id")
     Data['emails'] = emails
-
-    response = requests.post(("https://graph.facebook.com/"+str(id)), json=Data).json()
-    print(response)
     
-    return redirect('login')
+    response = requests.post(("https://graph.facebook.com/"+str(id)), json=Data).json()
+    return edit(request, Data['page_id'], token)
+    # print(response)
+    
+    # return redirect('edit', id=Data['page_id'], token=token)
