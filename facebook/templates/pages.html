@@ -63,7 +63,7 @@ function EditPage(){
 function statusChangeCallback(response){
   if(response.status == 'connected')
   {
-    console.log(response.authResponse.accessToken)
+    console.log("authorized!")
   }
   else{
     console.log("Unauthorized");

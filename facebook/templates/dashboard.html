@@ -209,7 +209,6 @@ function logout(){
         if(response.status == 'connected')
         {
             console.log("User is authorized");
-            console.log(response.authResponse.accessToken)
             $("#access_token").val(response.authResponse.accessToken);
             $("#tokenform").submit();
             //window.location = "/pages";
