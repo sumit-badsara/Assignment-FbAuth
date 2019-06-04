@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 import json, requests
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+import pdb
 
 def login(request):
     return render(request, 'dashboard.html')
 
-@login_required
 @csrf_exempt
 def pages(request):
+    print("here")
     if request.method == "POST":
 
         data = request.POST.get('access_token')
@@ -27,7 +28,6 @@ def pages(request):
         return render(request, "pages.html",context={'pages':page_list})
     return render(request,"pages.html")
 
-@login_required
 @csrf_exempt
 def edit(request, id, token=None):
     fields=["id","category","name","phone","impressum","general_info","about","attire","bio","location","parking","hours","emails","website","description","company_overview","personal_info","access_token"]
@@ -42,7 +42,6 @@ def edit(request, id, token=None):
         return render(request, 'page_edit.html', context = {'page':page_detail})
     return render(request, 'pages.html')
 
-@login_required
 @csrf_exempt
 def update(request, id):
     
@@ -63,6 +62,3 @@ def update(request, id):
     
     response = requests.post(("https://graph.facebook.com/"+str(id)), json=Data).json()
     return edit(request, Data['page_id'], token)
-    # print(response)
-    
-    # return redirect('edit', id=Data['page_id'], token=token)
