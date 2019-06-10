@@ -69,7 +69,7 @@
 
         function checkNull(parameter, Name) {
             if (parameter == "") {
-                M.toast({ html: Name + " cannot be empty" });
+                alert(Name +" cannot be empty");
                 return false;
             } else {
                 return true;
@@ -79,7 +79,7 @@
         function isUrlValid(userInput) {
             var res = userInput.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
             if (res == null) {
-                M.toast({ html: "Enter a valid website url" });
+                alert("Enter a valid website url");
                 return false;
             }
             else
@@ -90,7 +90,7 @@
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             var res = email.match(re);
             if (res == null) {
-                M.toast({ html: "Enter a valid email address" });
+                alert("Enter a valid email address");
                 return false;
             } else {
                 return true;
@@ -101,7 +101,7 @@
             if (number.length == 10) {
                 return true;
             } else {
-                $("#phone").toast("Enter a valid 10 digit phone number");
+                alert('Please Enter a 10 digit Number!');
                 return false;
             }
         }
@@ -150,6 +150,9 @@
            
 
 </script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 {% endblock javascript %}
     
